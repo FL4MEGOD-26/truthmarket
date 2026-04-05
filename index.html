@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthMarket - Terminal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="landing-page">
+    <header class="navbar glass-panel-flat">
+        <div class="logo">
+            <i class="fa-solid fa-scale-balanced text-brand"></i>
+            <span>TruthMarket</span>
+        </div>
+        <nav>
+            <a href="index.html" class="active">Home</a>
+            <a href="dashboard.html">Terminal</a>
+            <a href="dashboard.html#markets">Prediction Markets</a>
+            <a href="dashboard.html#news">Global News</a>
+        </nav>
+        <div class="user-actions">
+            <a href="dashboard.html" class="btn btn-primary">Launch Terminal</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero glass-panel hero-panel">
+            <div class="hero-content">
+                <span class="badge badge-glow">Omni-Intelligence Engine v2.0</span>
+                <h1 class="hero-title">Detect Truth.<br>Trade Information.</h1>
+                <p class="hero-subtitle">The ultimate terminal for reality. Cross-reference breaking global news with
+                    decentralized prediction markets and real-time crypto intelligence.</p>
+
+                <div class="hero-actions">
+                    <a href="dashboard.html" class="btn btn-primary btn-large">Explore Markets <i
+                            class="fa-solid fa-chart-pie ml-sm"></i></a>
+                    <a href="dashboard.html#analyzer" class="btn btn-outline btn-large">Analyze News <i
+                            class="fa-solid fa-shield-halved ml-sm"></i></a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <!-- Data Vis Decoration -->
+                <div class="mock-card glass-panel" style="--offset-x: 0px; animation-duration: 5s;">
+                    <div class="card-header flex-between mb-sm">
+                        <span class="font-bold">ETF Approvals by EOY?</span>
+                        <span class="probability-badge text-truth">89%</span>
+                    </div>
+                    <div class="card-bar">
+                        <div class="card-bar-fill bg-truth" style="width: 89%"></div>
+                        <div class="card-bar-fill bg-fake" style="width: 11%"></div>
+                    </div>
+                    <div class="mt-sm text-xs text-muted flex-between">
+                        <span><i class="fa-solid fa-link"></i> Correlated to: WSJ Finance</span>
+                        <span class="text-truth">Bullish Sentiment</span>
+                    </div>
+                </div>
+
+                <div class="mock-card glass-panel mockup-offset" style="--offset-x: -30px; animation-duration: 7s;">
+                    <div class="card-header flex-between mb-sm">
+                        <span class="font-bold">Deepfake Election Scandal?</span>
+                        <span class="probability-badge text-fake">14%</span>
+                    </div>
+                    <div class="card-bar">
+                        <div class="card-bar-fill bg-truth" style="width: 14%"></div>
+                        <div class="card-bar-fill bg-fake" style="width: 86%"></div>
+                    </div>
+                    <div class="mt-sm text-xs text-muted flex-between">
+                        <span><i class="fa-solid fa-shield-virus"></i> AI Analysis: 95% Fake</span>
+                        <span class="text-fake">Suspicious Origin</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

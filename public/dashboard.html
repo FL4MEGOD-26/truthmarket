@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthMarket — Intelligence Terminal</title>
+    <meta name="description" content="Live prediction markets, crypto data, news analysis, and fake news detection in one terminal.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-page">
+
+    <!-- Top Bar -->
+    <header class="navbar border-bottom">
+        <div class="logo">
+            <i class="fa-solid fa-scale-balanced text-brand"></i>
+            <a href="index.html" style="color:#fff;text-decoration:none;">TruthMarket</a>
+        </div>
+        <div class="search-bar">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="global-search" placeholder="Search markets, news, crypto…">
+        </div>
+        <div class="user-info">
+            <span class="balance glass-badge">$2,340.50 <span class="text-truth">+5.2%</span></span>
+            <div class="avatar"><i class="fa-solid fa-fingerprint"></i></div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="side-nav" id="tab-controls">
+                <button class="nav-btn active" data-target="tab-markets"><i class="fa-solid fa-chart-line"></i> Prediction Markets</button>
+                <button class="nav-btn" data-target="tab-news"><i class="fa-regular fa-newspaper"></i> News Intelligence</button>
+                <button class="nav-btn" data-target="tab-crypto"><i class="fa-brands fa-ethereum"></i> Crypto Intelligence</button>
+                <button class="nav-btn" data-target="tab-analyzer"><i class="fa-solid fa-brain"></i> AI News Analyzer</button>
+                <button class="nav-btn" data-target="tab-converter"><i class="fa-solid fa-retweet"></i> Global Conversions</button>
+            </nav>
+        </aside>
+
+        <!-- Content Panes -->
+        <main class="main-content">
+
+            <!-- ═══ Prediction Markets ═══ -->
+            <section id="tab-markets" class="tab-pane active">
+                <div class="header-with-filters">
+                    <div>
+                        <h2>Live Prediction Markets</h2>
+                        <p class="text-muted text-sm mt-xs">Data via Polymarket Gamma API. Track community sentiment vs reality.</p>
+                    </div>
+                    <div class="filters">
+                        <button class="filter-btn active">Highest Volume</button>
+                        <button class="filter-btn">Highly Debated</button>
+                    </div>
+                </div>
+                <div id="markets-loading" class="skeleton-grid">
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                </div>
+                <div class="markets-grid" id="polymarket-container"></div>
+            </section>
+
+            <!-- ═══ News Intelligence ═══ -->
+            <section id="tab-news" class="tab-pane">
+                <div class="header-with-filters">
+                    <div>
+                        <h2>Global News Intelligence</h2>
+                        <p class="text-muted text-sm mt-xs">Headlines with server-side Credibility Scoring.</p>
+                    </div>
+                    <div class="filters">
+                        <button class="filter-btn active" onclick="loadNews('general')">General</button>
+                        <button class="filter-btn" onclick="loadNews('technology')">Tech</button>
+                        <button class="filter-btn" onclick="loadNews('business')">Finance</button>
+                    </div>
+                </div>
+                <div id="news-loading" class="skeleton-list">
+                    <div class="skeleton skeleton-row"></div>
+                    <div class="skeleton skeleton-row"></div>
+                    <div class="skeleton skeleton-row"></div>
+                </div>
+                <div class="news-list" id="news-container"></div>
+            </section>
+
+            <!-- ═══ Crypto Intelligence ═══ -->
+            <section id="tab-crypto" class="tab-pane">
+                <div class="mb-lg">
+                    <h2>Crypto Market Intelligence</h2>
+                    <p class="text-muted text-sm mt-xs">Real-time valuation from CoinGecko.</p>
+                </div>
+                <div id="crypto-loading" class="skeleton-grid">
+                    <div class="skeleton" style="height:400px;grid-column:span 2;"></div>
+                    <div class="skeleton" style="height:400px;"></div>
+                </div>
+                <div class="crypto-dashboard-grid hidden" id="crypto-content">
+                    <div class="glass-panel chart-container">
+                        <div class="flex-between mb-sm">
+                            <h3>Asset Trend Visualization</h3>
+                            <select id="crypto-chart-select" class="glass-input text-sm"></select>
+                        </div>
+                        <canvas id="cryptoChart"></canvas>
+                    </div>
+                    <div class="glass-panel crypto-list-panel">
+                        <h3>Top Assets by Market Cap</h3>
+                        <div class="crypto-list" id="crypto-list-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ AI Analyzer ═══ -->
+            <section id="tab-analyzer" class="tab-pane">
+                <div class="analyzer-layout">
+                    <div class="glass-panel analyzer-input-card border-top-brand">
+                        <h2>Fake News Analysis Engine</h2>
+                        <p class="text-muted mb-md mt-xs">Submit text or URL. Scans for clickbait, hyperbole, and cross-references live Polymarket sentiment.</p>
+                        <textarea id="ai-input" rows="7" placeholder="Paste headline, tweet, or article snippet…"></textarea>
+                        <div class="flex-between mt-md">
+                            <span class="text-xs text-muted"><i class="fa-solid fa-circle-info"></i> Keyword heuristic engine</span>
+                            <button id="ai-analyze-btn" class="btn btn-brand w-50">Compute Verdict <i class="fa-solid fa-microchip"></i></button>
+                        </div>
+                    </div>
+                    <div class="glass-panel analyzer-result-card hidden" id="ai-result">
+                        <div class="result-header pb-sm border-bottom-subtle">
+                            <h3>Engine Verdict</h3>
+                            <span class="prediction-tag" id="ai-tag">REAL</span>
+                        </div>
+                        <div class="confidence-meter mt-md">
+                            <div class="flex-between mb-xs">
+                                <span class="font-bold">Authenticity Confidence</span>
+                                <span id="ai-score" class="font-bold">0%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="ai-meter" style="width:0%"></div>
+                            </div>
+                        </div>
+                        <div class="mt-md bg-darker p-sm rounded border-subtle">
+                            <h4 class="mb-xs text-sm text-brand"><i class="fa-solid fa-magnifying-glass"></i> Heuristic Flags</h4>
+                            <p id="ai-reasoning" class="text-sm line-height-lg"></p>
+                        </div>
+                        <div id="ai-correlation" class="hidden mt-md p-sm glass-badge border-truth">
+                            <h4 class="text-xs mb-xs text-truth"><i class="fa-solid fa-link"></i> Correlated Prediction Market</h4>
+                            <p id="ai-correlation-text" class="text-sm font-bold"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ Converter ═══ -->
+            <section id="tab-converter" class="tab-pane">
+                <div class="mb-lg">
+                    <h2>Global Financial Conversions</h2>
+                    <p class="text-muted text-sm mt-xs">Live exchange rates — Fiat & Crypto.</p>
+                </div>
+                <div class="converter-grid">
+                    <div class="glass-panel">
+                        <h3 class="mb-md"><i class="fa-solid fa-dollar-sign text-truth"></i> Fiat Exchange</h3>
+                        <div id="fiat-loading" class="skeleton skeleton-row mt-md"></div>
+                        <div id="fiat-content" class="hidden">
+                            <canvas id="fiatChart" style="height:150px;margin-bottom:1.5rem;"></canvas>
+                            <div class="conversion-box">
+                                <input type="number" id="usd-amt" value="100" min="1">
+                                <span>USD</span>
+                            </div>
+                            <div class="flex-center my-sm"><i class="fa-solid fa-arrow-down text-muted"></i></div>
+                            <div class="conversion-results" id="fiat-results"></div>
+                        </div>
+                    </div>
+                    <div class="glass-panel">
+                        <h3 class="mb-md"><i class="fa-brands fa-bitcoin text-brand"></i> Crypto Converter</h3>
+                        <div id="crypto-conv-loading" class="skeleton skeleton-row mt-md"></div>
+                        <div id="crypto-conv-content" class="hidden">
+                            <div class="conversion-box mb-md">
+                                <input type="number" id="crypt-amt" value="1" min="0.001" step="0.01">
+                                <select id="crypt-sel" class="glass-input">
+                                    <option value="bitcoin">BTC</option>
+                                    <option value="ethereum">ETH</option>
+                                    <option value="solana">SOL</option>
+                                </select>
+                            </div>
+                            <div class="flex-center my-sm"><i class="fa-solid fa-arrow-down text-muted"></i></div>
+                            <div class="conversion-results" id="crypt-results"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
